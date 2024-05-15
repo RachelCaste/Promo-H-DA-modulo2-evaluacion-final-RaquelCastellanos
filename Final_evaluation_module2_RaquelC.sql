@@ -1,6 +1,3 @@
-/* 
- */
-
 /* EJERCICIO FINAL MÓDULO 2 - 
 	RAQUEL CASTELLANOS  */
     
@@ -17,7 +14,7 @@ WHERE rating = "PG-13";
 -- 3 Encuentra el título y la descripción de todas las películas que contengan la palabra "amazing" en su descripción.
 SELECT DISTINCT title, description
 FROM film
-WHERE description REGEXP "amazin.";
+WHERE description REGEXP "amazi.g";
 
 -- 4 Encuentra el título de todas las películas que tengan una duración mayor a 120 minutos.
 SELECT DISTINCT title, length
@@ -79,7 +76,7 @@ WHERE film.title = "Indian Love";
 -- 14	Muestra el título de todas las películas que contengan la palabra "dog" o "cat" en su descripción.
 SELECT title, description
 FROM film
-WHERE description LIKE ("%dog%") OR ("cat%");
+WHERE description LIKE ("%dog%") OR description LIKE ("%cat%");
 
 -- 15. Hay algún actor o actriz que no apareca en ninguna película en la tabla film_actor.
 SELECT actor.first_name, actor.last_name
@@ -101,7 +98,7 @@ INNER JOIN category ON category.category_id = film_category.category_id
 WHERE category.name = "Family";
 
 -- 18. Muestra el nombre y apellido de los actores que aparecen en más de 10 películas DIFERENTES.
-SELECT actor.actor_id, actor.first_name, actor.last_name, COUNT(DISTINCT film_actor.film_id) AS TotalNumberFilms
+SELECT actor.first_name, actor.last_name, COUNT(DISTINCT film_actor.film_id) AS TotalNumberFilms
 FROM actor
 INNER JOIN film_actor
 ON actor.actor_id = film_actor.actor_id
@@ -168,19 +165,14 @@ INNER JOIN film_category ON film_actor.film_id = film_category.film_id
 INNER JOIN category ON film_category.category_id = category.category_id;
 
 -- 24 BONUS: Encuentra el título de las películas que son comedias y tienen una duración mayor a 180 minutos en la tabla film.
--- First i check which titles are in the category "Comedy"
+#First i check which titles are in the category "Comedy"
 SELECT f.title, category.name
 FROM film AS f
 INNER JOIN film_category ON f.film_id = film_category.film_id
 INNER JOIN category ON film_category.category_id = category.category_id
 WHERE category.name = "Comedy";
 
--- And i check which movies are longer than 180 minutes.
-SELECT title, length
-from film
-WHERE length > 180;
-
--- now i put everything toguether
+# And now i put it toguether with the length conditional:
 SELECT f.title,f.length, category.name 
 FROM film AS f
 INNER JOIN film_category ON f.film_id = film_category.film_id
@@ -188,23 +180,7 @@ INNER JOIN category ON film_category.category_id = category.category_id
 WHERE category.name = "Comedy"
 and length > 180;
 
--- 25. BONUS: Encuentra todos los actores que han actuado juntos en al menos una película. La consulta debe mostrar el nombre y apellido de los actores y el número de películas en las que han actuado juntos.
-SELECT distinct actor.first_name,actor.last_name, COUNT(film_actor.film_id) AS TotalActorsPerMovie
-FROM actor
-INNER JOIN film_actor ON actor.actor_id = film_actor.actor_id
-GROUP BY actor.first_name,actor.last_name ;
 
-
--- Query just to know if actors are in the same movies
-SELECT A.actor_id, A.film_id,
-B.actor_id, B.film_id
-FROM film_actor as A,  film_actor as B
-WHERE A.actor_id = B.actor_id
-AND A.film_id <> B.film_id
-AND A.film_id IN (
-    SELECT film_id
-    FROM film_actor
-    WHERE actor_id = A.actor_id);
 
 
 
